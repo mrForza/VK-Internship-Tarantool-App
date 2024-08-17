@@ -1,0 +1,19 @@
+[tool.poetry]
+name = "authorization-service"
+version = "0.1.0"
+description = "The service responsible for registration/authentication/authorization of users in the system."
+authors = ["Roman Gromov"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.12"
+pyjwt = {extras = ["crypto"], version = "^2.9.0"}
+fastapi = "^0.112.1"
+uvicorn = "^0.30.6"
+tarantool = "^1.2.0"
+asynctnt = "^2.3.0"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

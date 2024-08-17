@@ -1,0 +1,22 @@
+version: '3.8'
+
+services:
+  authorization_service:
+    container_name: 'authorization_service'
+    build: ./authorization_service/
+    depends_on:
+      - authorization_tarantool_db
+    ports:
+      - 8000:8080
+    networks:
+      - net1
+  authorization_tarantool_db:
+    container_name: authorization_tarantool_db
+    build: ./tarantool_infra/
+    ports:
+      - 3301:3301
+    networks: 
+      - net1
+
+networks:
+  net1:
