@@ -22,7 +22,13 @@ class AuthenticationRequestDto:
 
 @dataclass(frozen=True)
 class AuthenticationResponseDto:
+    token: str
     verdict: str
+
+
+@dataclass(frozen=True)
+class LogoutRequestDto:
+    token: str
 
 
 @dataclass(frozen=True)

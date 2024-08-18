@@ -9,11 +9,12 @@ class JwtConfig:
     private_key_path: Path = BASE_DIR / 'certificates' / 'private_key.pem'
     public_key_path: Path = BASE_DIR / 'certificates' / 'public_key.pem'
     algorithm: str = 'RS256'
+    expiration_in_minutes: int = 30
 
 
 @dataclass
 class APIConfig:
-    host: str = '127.0.0.2'
+    host: str = '127.0.0.1'
     port: int = 8080
     jwt_config: JwtConfig = field(default_factory=JwtConfig)
     debug: bool = False

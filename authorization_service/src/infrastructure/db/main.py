@@ -1,10 +1,10 @@
-import asynctnt
-import tarantool
+from asynctnt import Connection
 
 from src.config import DbConfig
 
 
-async def init_connection(db_config: DbConfig):
-    conn = asynctnt.Connection(host=db_config.host, port=db_config.port)
+async def get_connection() -> Connection:
+    conn = Connection(host=DbConfig().host, port=DbConfig().port)
     await conn.connect()
-    print('!' * 30, 'OK')
+    print('Let\'s start!')
+    return conn

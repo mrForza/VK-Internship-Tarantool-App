@@ -7,7 +7,7 @@ services:
     depends_on:
       - authorization_tarantool_db
     ports:
-      - 8000:8080
+      - 8080:8080
     networks:
       - net1
   authorization_tarantool_db:
@@ -20,3 +20,4 @@ services:
 
 networks:
   net1:
+    driver: bridge

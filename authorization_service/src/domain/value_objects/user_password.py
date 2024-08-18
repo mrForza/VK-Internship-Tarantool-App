@@ -1,6 +1,7 @@
 from dataclasses import dataclass
 
 from src.domain.common.value_object import BaseValueObject, BaseValueObjectValidator
+from src.domain.exceptions.user_password import BadPasswordLength, BadPasswordContent, ViolatedLength, MissingSymbols
 
 
 class UserPasswordValidator(BaseValueObjectValidator):
@@ -18,16 +19,21 @@ class UserPasswordValidator(BaseValueObjectValidator):
 
     def validate_length(self, raw_password: str) -> None:
         if len(raw_password) < self.MINIMAL_PASSWORD_LENGTH:
-            raise Exception()
+            raise BadPasswordLength(ViolatedLength.SMALL)
         elif len(raw_password) > self.MAXIMUM_PASSWORD_LENGTH:
-            raise Exception()
+            raise BadPasswordLength(ViolatedLength.BIG)
 
     def validate_symbols(self, raw_password: str) -> None:
         unique_symbols = set(raw_password)
 
-        for symbols_set in (self.LOWERCASE_LETTERS, self.UPPERCASE_LETTERS, self.SPECIAL_SYMBOLS, self.DIGITS):
+        for i, symbols_set in enumerate([
+                self.LOWERCASE_LETTERS,
+                self.UPPERCASE_LETTERS,
+                self.DIGITS,
+                self.SPECIAL_SYMBOLS
+        ]):
             if not unique_symbols.intersection(symbols_set):
-                raise Exception()
+                raise BadPasswordContent(MissingSymbols(i))
 
     def validate(self, raw_password: str) -> None:
         self.validate_length(raw_password)

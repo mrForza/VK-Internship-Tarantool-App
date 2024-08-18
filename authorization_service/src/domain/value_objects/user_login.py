@@ -1,6 +1,7 @@
 from dataclasses import dataclass
 
 from src.domain.common.value_object import BaseValueObject, BaseValueObjectValidator
+from src.domain.exceptions.user_login import BadLoginLength, BadLoginContent, ViolatedLength
 
 
 class UserLoginValidator(BaseValueObjectValidator):
@@ -16,14 +17,14 @@ class UserLoginValidator(BaseValueObjectValidator):
     
     def validate_length(self, raw_login: str) -> None:
         if len(raw_login) < self.MINIMAL_LOGIN_LENGTH:
-            raise Exception()
+            raise BadLoginLength(ViolatedLength.SMALL)
         elif len(raw_login) > self.MAXIMUM_LOGIN_LENGTH:
-            raise Exception()
+            raise BadLoginLength(ViolatedLength.BIG)
 
     def validate_symbols(self, raw_login: str):
         login_unique_symbols = set(raw_login)
-        if not login_unique_symbols.difference(self.AVAILABLE_SYMBOLS):
-            raise Exception()
+        if login_unique_symbols.difference(self.AVAILABLE_SYMBOLS):
+            raise BadLoginContent()
     
     def validate(self, raw_login: str) -> None:
         self.validate_length(raw_login)
