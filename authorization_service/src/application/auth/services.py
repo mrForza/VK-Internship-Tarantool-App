@@ -31,6 +31,20 @@ class JwtService:
     def decode_jwt(self, token: str, private_key: str, algorithm: str) -> dict:
         return jwt.decode(token, private_key, algorithm)
 
+    def validate_jwt_token(self, token: str) -> bool:
+        try:
+            decoded = jwt.decode(
+                token,
+                key=jwt_config.public_key_path.read_text(),
+                algorithms=[jwt_config.algorithm]
+            )
+            print(decoded)
+            return True
+        except (jwt.DecodeError, jwt.ExpiredSignatureError):
+            return False
+        except Exception:
+            return False
+
 
 @dataclass
 class AuthorizationService:
@@ -73,6 +87,23 @@ class AuthorizationService:
             return LogoutResponseDto('You have been successfully logout from your account! Please, remove a jwt token '
                                      'from your Authorization Headers) I\'m so lazy to do it)')
         return LogoutResponseDto('You have not been authenticated!')
+
+    def check(self, check_dto: CheckRequestDto) -> CheckResponseDto:
+        authorization_header = check_dto.authorization
+        if authorization_header == '':
+            return CheckResponseDto('NO')
+
+        data = authorization_header.split(' ')
+        if len(data) != 2:
+            return CheckResponseDto('NO')
+        bearer, token = data
+        if bearer is None or token is None:
+            return CheckResponseDto('NO')
+
+        print('!' * 10, token)
+        if not self.jwt_service.validate_jwt_token(token):
+            return CheckResponseDto('NO')
+        return CheckResponseDto('YES')
 
     def verify_passwords(self, raw_password: str, hashed_password: str) -> None:
         if CryptContext(schemes=["bcrypt"], deprecated="auto") \

@@ -34,3 +34,13 @@ class LogoutRequestDto:
 @dataclass(frozen=True)
 class LogoutResponseDto:
     verdict: str
+
+
+@dataclass(frozen=True)
+class CheckRequestDto:
+    authorization: str
+
+
+@dataclass(frozen=True)
+class CheckResponseDto:
+    authorized: str

@@ -33,3 +33,11 @@ async def logout(
 ) -> LogoutResponseDto:
     response = auth_service.logout(LogoutRequestDto(requset.headers.get('Authorization')))
     return response
+
+
+@authorization_router.post('/check/', response_model=None)
+def check(
+        check_dto: CheckRequestDto,
+        auth_service: AuthorizationService = Depends(get_authorization_service)
+) -> CheckResponseDto:
+    return auth_service.check(check_dto)

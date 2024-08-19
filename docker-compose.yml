@@ -1,6 +1,8 @@
 version: '3.8'
 
+
 services:
+
   authorization_service:
     container_name: 'authorization_service'
     build: ./authorization_service/
@@ -9,15 +11,35 @@ services:
     ports:
       - 8080:8080
     networks:
-      - net1
+      - main_net
+
   authorization_tarantool_db:
     container_name: authorization_tarantool_db
-    build: ./tarantool_infra/
+    build: ./tarantool_infra/authorization_tarantool/
     ports:
       - 3301:3301
     networks: 
-      - net1
+      - main_net
+
+  key_value_service:
+    container_name: 'key_value_service'
+    build: ./key_value_service/
+    depends_on:
+      - key_value_tarantool_db
+    ports:
+      - 9080:9080
+    networks:
+      - main_net
+
+  key_value_tarantool_db:
+    container_name: key_value_tarantool_db
+    build: ./tarantool_infra/key_value_tarantool/
+    ports:
+      - 3302:3301
+    networks:
+      - main_net
+
 
 networks:
-  net1:
+  main_net:
     driver: bridge
