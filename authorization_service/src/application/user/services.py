@@ -3,7 +3,7 @@ from passlib.context import CryptContext
 from src.application.user.dto import FullUserDto
 from src.application.user.mapper import UserMapper
 from src.application.user.interfaces import UserReader, UserWriter
-from src.application.auth.exceptions import UserAlreadyExists
+from src.application.auth.exceptions import UserAlreadyExists, IncorrectLoginOrPassword
 
 
 class UserCommandService:
@@ -34,5 +34,5 @@ class UserQueryService:
     async def get_user(self, login: str) -> FullUserDto:
         user = await self.repo.get_user_by_login(login)
         if user is None:
-            raise Exception()
+            raise IncorrectLoginOrPassword()
         return user

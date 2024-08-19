@@ -5,9 +5,7 @@ from passlib.context import CryptContext
 from src.application.user.services import UserQueryService, UserCommandService
 from src.application.auth.dto import *
 from src.application.user.mapper import UserMapper
-from src.application.auth.exceptions import ApplicationException, MismatchedPasswords
-from src.infrastructure.db.repositories.user_repository import UserRepository
-from src.domain.common.exception import DomainException
+from src.application.auth.exceptions import UserIsNotAuthorized, MismatchedPasswords
 from src.config import JwtConfig
 
 jwt_config = JwtConfig()
@@ -54,39 +52,29 @@ class AuthorizationService:
     mapper: UserMapper
 
     async def register(self, registration_dto: RegistrationRequestDto) -> RegistrationResponseDto:
-        try:
-            await self.user_query_service.check_user_existance(registration_dto.login)
-            await self.user_command_service.save_user(
-                self.mapper.convert_registration_dto_to_full_user_dto(registration_dto)
-            )
-            return RegistrationResponseDto('You have been successfully regirested!')
-        except (ApplicationException, DomainException) as error:
-            return RegistrationResponseDto(error.message)
-        except Exception as error:
-            return RegistrationResponseDto(str(error))
+        await self.user_query_service.check_user_existance(registration_dto.login)
+        await self.user_command_service.save_user(
+            self.mapper.convert_registration_dto_to_full_user_dto(registration_dto)
+        )
+        return RegistrationResponseDto('You have been successfully regirested!')
 
     async def authenticate(self, authentication_dto: AuthenticationRequestDto) -> AuthenticationResponseDto:
-        try:
-            user = await self.user_query_service.get_user(authentication_dto.login)
-            self.verify_passwords(authentication_dto.password, user.password)
-            return AuthenticationResponseDto(
-                token=self.jwt_service.generate_token(payload={
-                    'sub': f'{user.name} {user.surname}',
-                    'username': user.login,
-                    'email': user.login
-                }),
-                verdict='You have been successfully authenticated'
-            )
-        except (ApplicationException, DomainException) as error:
-            return AuthenticationResponseDto(token='-', verdict=error.message)
-        except Exception as error:
-            return AuthenticationResponseDto(token='-', verdict=str(error))
+        user = await self.user_query_service.get_user(authentication_dto.login)
+        self.verify_passwords(authentication_dto.password, user.password)
+        return AuthenticationResponseDto(
+            token=self.jwt_service.generate_token(payload={
+                'sub': f'{user.name} {user.surname}',
+                'username': user.login,
+                'email': user.login
+            }),
+            message='You have been successfully authenticated'
+        )
 
     def logout(self, logout_dto: LogoutRequestDto) -> LogoutResponseDto:
         if logout_dto.token is not None:
             return LogoutResponseDto('You have been successfully logout from your account! Please, remove a jwt token '
                                      'from your Authorization Headers) I\'m so lazy to do it)')
-        return LogoutResponseDto('You have not been authenticated!')
+        raise UserIsNotAuthorized()
 
     def check(self, check_dto: CheckRequestDto) -> CheckResponseDto:
         authorization_header = check_dto.authorization
@@ -107,5 +95,5 @@ class AuthorizationService:
 
     def verify_passwords(self, raw_password: str, hashed_password: str) -> None:
         if CryptContext(schemes=["bcrypt"], deprecated="auto") \
-                .hash(raw_password, salt="a"*21 + "e") != hashed_password:
+                .hash(raw_password, salt="a" * 21 + "e") != hashed_password:
             raise MismatchedPasswords()
