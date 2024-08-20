@@ -2,8 +2,8 @@ from abc import ABC
 from dataclasses import dataclass, field
 from typing import List
 
-from src.domain.common.event import BaseEvent
 from src.domain.common.entity import BaseEntity
+from src.domain.common.event import BaseEvent
 
 
 @dataclass()

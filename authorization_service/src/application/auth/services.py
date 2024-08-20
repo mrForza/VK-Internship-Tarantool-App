@@ -1,15 +1,19 @@
-import jwt
 from dataclasses import dataclass
 from datetime import datetime, timedelta
+
+import jwt
 from passlib.context import CryptContext
 
-from src.application.user.services import UserQueryService, UserCommandService
-from src.application.auth.dto import (
-    RegistrationRequestDto, RegistrationResponseDto, AuthenticationRequestDto, AuthenticationResponseDto,
-    LogoutRequestDto, LogoutResponseDto, CheckRequestDto, CheckResponseDto,
-)
+from src.application.auth.dto import (AuthenticationRequestDto,
+                                      AuthenticationResponseDto,
+                                      CheckRequestDto, CheckResponseDto,
+                                      LogoutRequestDto, LogoutResponseDto,
+                                      RegistrationRequestDto,
+                                      RegistrationResponseDto)
+from src.application.auth.exceptions import (IncorrectLoginOrPassword,
+                                             UserIsNotAuthorized)
 from src.application.user.mapper import UserMapper
-from src.application.auth.exceptions import UserIsNotAuthorized, IncorrectLoginOrPassword
+from src.application.user.services import UserCommandService, UserQueryService
 from src.config import JwtConfig
 
 jwt_config = JwtConfig()

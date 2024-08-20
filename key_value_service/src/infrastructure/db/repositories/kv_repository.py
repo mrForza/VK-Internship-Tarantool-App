@@ -1,8 +1,10 @@
-from asynctnt import Connection, TarantoolTuple
-from typing import List
 from dataclasses import dataclass
+from typing import List
 
-from src.application.dto import WriteKeyValuesResponseDto, ReadKeyValuesResponseDto
+from asynctnt import Connection, TarantoolTuple
+
+from src.application.dto import (ReadKeyValuesResponseDto,
+                                 WriteKeyValuesResponseDto)
 from src.application.exceptions import KeysDoNotExist
 from src.application.interfaces import KeyValueReader, KeyValueWriter
 from src.infrastructure.db.common.repository import TarantoolRepositoy

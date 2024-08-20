@@ -3,6 +3,8 @@ from pathlib import Path
 
 BASE_DIR = Path(__file__).parent.parent
 
+EXTERNAL_API_HOST = 'http://authorization_service:8080'
+
 
 @dataclass
 class APIConfig:

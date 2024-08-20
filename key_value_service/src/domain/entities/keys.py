@@ -2,8 +2,8 @@ from dataclasses import dataclass, field
 from typing import List
 
 from src.domain.common.entity import BaseEntity
+from src.domain.exceptions import DublicatedKeys, NoKeysInRequest
 from src.domain.value_objects.key import Key
-from src.domain.exceptions import NoKeysInRequest, DublicatedKeys
 
 
 class KeysValidator:

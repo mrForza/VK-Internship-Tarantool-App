@@ -1,7 +1,11 @@
 from dataclasses import dataclass
 
-from src.domain.common.value_object import BaseValueObject, BaseValueObjectValidator
-from src.domain.exceptions.user_password import BadPasswordLength, BadPasswordContent, ViolatedLength, MissingSymbols
+from src.domain.common.value_object import (BaseValueObject,
+                                            BaseValueObjectValidator)
+from src.domain.exceptions.user_password import (BadPasswordContent,
+                                                 BadPasswordLength,
+                                                 MissingSymbols,
+                                                 ViolatedLength)
 
 
 class UserPasswordValidator(BaseValueObjectValidator):

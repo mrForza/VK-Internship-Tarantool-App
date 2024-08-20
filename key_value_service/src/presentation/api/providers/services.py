@@ -1,11 +1,11 @@
-from asynctnt import Connection
 from fastapi import Depends
 
-from src.application.services import KeyValueCommandService, KeyValueQueryService, GeneralKeyValueService
-from src.config import DbConfig
+from src.application.services import (GeneralKeyValueService,
+                                      KeyValueCommandService,
+                                      KeyValueQueryService)
+from src.infrastructure.db.main import get_connection
 from src.infrastructure.db.repositories.kv_repository import KeyValueRepository
 from src.infrastructure.external_api.auth_service import ExternalApiService
-from src.infrastructure.db.main import get_connection
 
 
 def get_external_api_service() -> ExternalApiService:

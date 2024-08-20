@@ -1,7 +1,9 @@
 from dataclasses import dataclass
 
-from src.domain.common.value_object import BaseValueObject, BaseValueObjectValidator
-from src.domain.exceptions.user_login import BadLoginLength, BadLoginContent, ViolatedLength
+from src.domain.common.value_object import (BaseValueObject,
+                                            BaseValueObjectValidator)
+from src.domain.exceptions.user_login import (BadLoginContent, BadLoginLength,
+                                              ViolatedLength)
 
 
 class UserLoginValidator(BaseValueObjectValidator):

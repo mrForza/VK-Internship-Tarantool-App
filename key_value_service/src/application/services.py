@@ -1,8 +1,13 @@
-from src.application.dto import *
+from dataclasses import dataclass
+
+from src.application.dto import (ReadKeyValuesRequestDto,
+                                 ReadKeyValuesResponseDto,
+                                 WriteKeyValuesRequestDto,
+                                 WriteKeyValuesResponseDto)
 from src.application.mapper import KeyValueMapper
+from src.domain.entities.keys import KeysValidator
 from src.infrastructure.db.repositories.kv_repository import KeyValueRepository
 from src.infrastructure.external_api.auth_service import ExternalApiService
-from src.domain.entities.keys import KeysValidator
 
 
 class GeneralKeyValueService:
@@ -34,7 +39,6 @@ class KeyValueCommandService:
             key_values: WriteKeyValuesRequestDto,
             headers: dict
     ) -> WriteKeyValuesResponseDto:
-        print('#' * 10, key_values.data)
         self.external_api.check_authorization(headers)
         KeysValidator.validate_keys(  # check domain rules
             KeyValueMapper.convert_keys_dto_to_entity(

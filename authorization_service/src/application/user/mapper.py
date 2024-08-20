@@ -1,9 +1,9 @@
-from src.domain.entities.user import User
-from src.domain.value_objects import (
-    UserLogin, UserPassword, UserName, UserSurName
-)
-from src.application.user.dto import FullUserDto
 from src.application.auth.dto import RegistrationRequestDto
+from src.application.user.dto import FullUserDto
+from src.domain.entities.user import User
+from src.domain.value_objects.user_initials import UserName, UserSurName
+from src.domain.value_objects.user_login import UserLogin
+from src.domain.value_objects.user_password import UserPassword
 
 
 class UserMapper:

@@ -1,7 +1,8 @@
 from dataclasses import dataclass
 from typing import Any
 
-from src.domain.common.value_object import BaseValueObject, BaseValueObjectValidator
+from src.domain.common.value_object import (BaseValueObject,
+                                            BaseValueObjectValidator)
 
 
 class ValueValidator(BaseValueObjectValidator):

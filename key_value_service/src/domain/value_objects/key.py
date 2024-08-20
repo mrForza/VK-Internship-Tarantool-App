@@ -1,7 +1,8 @@
 from dataclasses import dataclass
-from typing import Union, Any
+from typing import Any, Union
 
-from src.domain.common.value_object import BaseValueObject, BaseValueObjectValidator
+from src.domain.common.value_object import (BaseValueObject,
+                                            BaseValueObjectValidator)
 from src.domain.exceptions import IncorrectTypeOfKey
 
 

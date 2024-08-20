@@ -1,7 +1,7 @@
 from dataclasses import dataclass
 
 from src.domain.common.exception import DomainException
-from src.domain.enums import ViolatedLength, MissingSymbols
+from src.domain.enums import MissingSymbols, ViolatedLength
 
 
 @dataclass(frozen=True)

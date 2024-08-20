@@ -3,16 +3,19 @@ from functools import wraps
 from fastapi import APIRouter, Depends, Request
 from starlette.responses import JSONResponse
 
-from src.application.auth.dto import (
-    RegistrationRequestDto, RegistrationResponseDto, AuthenticationRequestDto, AuthenticationResponseDto,
-    LogoutRequestDto, LogoutResponseDto, CheckRequestDto
-)
+from src.application.auth.dto import (AuthenticationRequestDto,
+                                      AuthenticationResponseDto,
+                                      CheckRequestDto, LogoutRequestDto,
+                                      LogoutResponseDto,
+                                      RegistrationRequestDto,
+                                      RegistrationResponseDto)
+from src.application.auth.exceptions import (DEFAUL_ERROR_MESSAGE,
+                                             ApplicationException,
+                                             IncorrectLoginOrPassword,
+                                             UserIsNotAuthorized)
 from src.application.auth.services import AuthorizationService
-from src.application.auth.exceptions import (
-    ApplicationException, UserIsNotAuthorized, IncorrectLoginOrPassword, DEFAUL_ERROR_MESSAGE
-)
-from src.presentation.api.providers.services import get_authorization_service
 from src.domain.common.exception import DomainException
+from src.presentation.api.providers.services import get_authorization_service
 
 authorization_router = APIRouter(prefix='/api', tags=['api'])
 

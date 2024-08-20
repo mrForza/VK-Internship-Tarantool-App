@@ -1,11 +1,11 @@
-from typing import List, Union
 from dataclasses import dataclass
+from typing import List, Union
 
 from asynctnt import Connection
 
 from src.application.user.dto import FullUserDto
-from src.infrastructure.db.common.repository import TarantoolRepositoy
 from src.application.user.interfaces import UserReader, UserWriter
+from src.infrastructure.db.common.repository import TarantoolRepositoy
 
 
 @dataclass

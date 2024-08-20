@@ -1,9 +1,10 @@
 from passlib.context import CryptContext
 
+from src.application.auth.exceptions import (IncorrectLoginOrPassword,
+                                             UserAlreadyExists)
 from src.application.user.dto import FullUserDto
-from src.application.user.mapper import UserMapper
 from src.application.user.interfaces import UserReader, UserWriter
-from src.application.auth.exceptions import UserAlreadyExists, IncorrectLoginOrPassword
+from src.application.user.mapper import UserMapper
 
 
 class UserCommandService:

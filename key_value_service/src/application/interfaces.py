@@ -1,7 +1,8 @@
 from abc import ABC, abstractmethod
 from typing import List
 
-from src.application.dto import ReadKeyValuesResponseDto, WriteKeyValuesResponseDto
+from src.application.dto import (ReadKeyValuesResponseDto,
+                                 WriteKeyValuesResponseDto)
 
 
 class KeyValueReader(ABC):

@@ -1,9 +1,9 @@
-from typing import Union, Any
+from typing import Any, Union
 
-from src.application.dto import *
+from src.application.dto import ReadKeyValuesRequestDto
+from src.domain.entities.keys import Keys
 from src.domain.value_objects.key import Key
 from src.domain.value_objects.value import Value
-from src.domain.entities.keys import Keys
 
 
 class KeyValueMapper:

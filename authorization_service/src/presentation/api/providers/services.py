@@ -1,18 +1,17 @@
-from fastapi import Depends
 from asynctnt import Connection
+from fastapi import Depends
 
-from src.application.auth.services import (
-    UserQueryService, UserCommandService, JwtService, AuthorizationService
-)
+from src.application.auth.services import (AuthorizationService, JwtService,
+                                           UserCommandService,
+                                           UserQueryService)
 from src.application.user.mapper import UserMapper
-from src.infrastructure.db.repositories.user_repository import UserRepository
 from src.config import DbConfig
+from src.infrastructure.db.repositories.user_repository import UserRepository
 
 
 async def get_db_connection() -> Connection:
     connection = Connection(host=DbConfig().host, port=DbConfig().port)
     await connection.connect()
-    print('!' * 30, 'OK')
     return connection
 
 

@@ -14,6 +14,7 @@ tarantool = "^1.2.0"
 asynctnt = "^2.3.0"
 passlib = "^1.7.4"
 flake8 = "^7.1.1"
+isort = "^5.13.2"
 
 
 [build-system]

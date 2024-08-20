@@ -1,8 +1,11 @@
-from enum import Enum
 from dataclasses import dataclass
+from enum import Enum
 
-from src.domain.common.value_object import BaseValueObject, BaseValueObjectValidator
-from src.domain.exceptions.user_initial import BadInitialLength, BadInitialContent, ViolatedLength
+from src.domain.common.value_object import (BaseValueObject,
+                                            BaseValueObjectValidator)
+from src.domain.exceptions.user_initial import (BadInitialContent,
+                                                BadInitialLength,
+                                                ViolatedLength)
 
 
 class TypeOfInitial(int, Enum):

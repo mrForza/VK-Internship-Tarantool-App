@@ -1,15 +1,20 @@
 from functools import wraps
+
 from fastapi import APIRouter, Depends, Request
 from starlette.responses import JSONResponse
 
-from src.application.dto import (
-    ReadKeyValuesRequestDto, ReadKeyValuesResponseDto, WriteKeyValuesRequestDto, WriteKeyValuesResponseDto,
-    ErrorResponse
-)
-from src.application.exceptions import UserIsNotAuthorized, ApplicationException, DEFAULT_ERROR_MESSAGE
-from src.application.services import KeyValueQueryService, KeyValueCommandService
+from src.application.dto import (ErrorResponse, ReadKeyValuesRequestDto,
+                                 ReadKeyValuesResponseDto,
+                                 WriteKeyValuesRequestDto,
+                                 WriteKeyValuesResponseDto)
+from src.application.exceptions import (DEFAULT_ERROR_MESSAGE,
+                                        ApplicationException,
+                                        UserIsNotAuthorized)
+from src.application.services import (KeyValueCommandService,
+                                      KeyValueQueryService)
 from src.domain.common.exception import DomainException
-from src.presentation.api.providers.services import get_kv_query_service, get_kv_command_service
+from src.presentation.api.providers.services import (get_kv_command_service,
+                                                     get_kv_query_service)
 
 key_value_router = APIRouter(prefix='/api', tags=['key_value'])
 
