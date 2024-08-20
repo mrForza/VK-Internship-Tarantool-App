@@ -19,6 +19,8 @@ VK-Internship-Tarantool-App
 |
 ├─── key_value_service <--- Микросервис обработки запросов на чтение-добавление пар ключ-значение
 |
+├─── postman_tests <--- Интеграционные тесты для API
+|
 └─── documentation <--- Директория с описаниями проекта (структура, архитектура, user-guides, описание api)
 
 ```
@@ -28,54 +30,54 @@ VK-Internship-Tarantool-App
 **Cтруктура микросервиса авторизации:**
 ``` bash
 C:.
-|   .dockerignore
-|   Dockerfile
+|   Dockerfile <-- Для деплоя микросервиса через docker-compose
 |
-├─── certificates
+├─── certificates <--- Ключи для генерации JWT токенов. (В реальных проектах на гит не заливаю))
 |       private_key.pem
 |       public_key.pem
 |
-├─── src
-|   |   config.py
-|   |
-|   |   main.py
-|   |
-|   |   poetry.lock
-|   |
-|   |   pyproject.toml
-|   |
-|   ├─── application
-|   |    |
-|   |    ├─── auth
-|   |    |
-|   |    └─── user
-|   |
-|   ├─── domain
-|   |    |
-|   |    ├─── common
-|   |    |
-|   |    ├─── entities
-|   |    |
-|   |    ├─── events
-|   |    |
-|   |    ├─── exceptions
-|   |    |
-|   |    └─── value_objects
-|   |
-|   ├─── infrastructure
-|   |    |
-|   |    └─── db
-|   |         |
-|   |         ├─── common
-|   |         |
-|   |         └─── repositories
-|   |
-|   └─── presentation
-|        |
-|        └─── api
-|             |
-|             ├─── controllers
-|             |
-|             └─── providers
-
+└─── src
+    |   config.py <--- Конфигурирующий файл
+    |
+    |   main.py <--- Файл с инстансом FastAPI класса
+    |
+    |   poetry.lock <--- Файл с установкой зависимостей через poetry
+    |
+    |   pyproject.toml <--- Файл с установкой зависимостей через poetry
+    |
+    ├─── application <--- Внешний слой бизнес логики
+    |    |
+    |    ├─── auth <--- Сервисы авторизации и JWT
+    |    |
+    |    └─── user <--- Сервисы для взаимодействия с репозиториями
+    |
+    ├─── domain <--- Ядро бизнес логики
+    |    |
+    |    ├─── common <--- Абстрактные классы для компонентов DDD
+    |    |
+    |    ├─── entities <--- Сущности бизнес логики
+    |    |
+    |    ├─── events <--- Для Event-Sourcing (не используется)
+    |    |
+    |    ├─── exceptions <--- Исключения бизнес-логики микросервиса
+    |    |
+    |    └─── value_objects <--- Датаклассы для сущностей бизнес логики
+    |
+    ├─── infrastructure
+    |    |
+    |    └─── db <--- Код для взаимодействия с бд
+    |         |
+    |         ├─── common <--- Интерфейсы для паттерна "Репозиторий"
+    |         |
+    |         └─── repositories <--- Классы паттерны "Репозиторий"
+    |
+    └─── presentation
+         |
+         └─── api
+              |
+              ├─── controllers <--- Обработка входящих запросов
+              |
+              └─── providers <--- Функции для dependency-injection
 ```
+
+**Cтруктура микросервиса key-value пар аналогична:**

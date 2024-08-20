@@ -8,12 +8,6 @@
 
 - [Выход из аккаунта](http://localhost:8080/api/logout/)
 
-- [Получение всех пользователей](http://localhost:8080/api/users/)
-
-- [Получение пользователя по логину](http://localhost:8080/api/users/{user_login}/)
-
-- [Получить информацию про свой профиль](http://localhost:8080/api/users/me/)
-
 <br>
 
 ### Эндпоинты *Микросервиса обработки пар key-value*:
