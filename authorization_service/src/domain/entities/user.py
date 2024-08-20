@@ -1,7 +1,9 @@
 from dataclasses import dataclass
 
 from src.domain.common.aggregate_root import AggregateRoot
-from src.domain.value_objects import *
+from src.domain.value_objects import (
+    UserLogin, UserPassword, UserName, UserSurName
+)
 
 
 @dataclass()

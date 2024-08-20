@@ -14,7 +14,7 @@ class UserLoginValidator(BaseValueObjectValidator):
         ''.join([chr(code) for code in range(97, 122 + 1)]) +
         ''.join([chr(code) for code in range(65, 90 + 1)])
     )
-    
+
     def validate_length(self, raw_login: str) -> None:
         if len(raw_login) < self.MINIMAL_LOGIN_LENGTH:
             raise BadLoginLength(ViolatedLength.SMALL)
@@ -25,7 +25,7 @@ class UserLoginValidator(BaseValueObjectValidator):
         login_unique_symbols = set(raw_login)
         if login_unique_symbols.difference(self.AVAILABLE_SYMBOLS):
             raise BadLoginContent()
-    
+
     def validate(self, raw_login: str) -> None:
         self.validate_length(raw_login)
         self.validate_symbols(raw_login)

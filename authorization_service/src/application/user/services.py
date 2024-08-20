@@ -12,10 +12,10 @@ class UserCommandService:
         self.mapper = mapper
 
     async def save_user(self, user_dto: FullUserDto) -> None:
-        user_entity = self.mapper.convert_full_user_dto_to_entity(user_dto)  # Check domain rules
+        self.mapper.convert_full_user_dto_to_entity(user_dto)  # Check domain rules
         updated_dto = FullUserDto(
             user_dto.login,
-            CryptContext(schemes=["bcrypt"], deprecated="auto").hash(user_dto.password, salt="a"*21 + "e"),
+            CryptContext(schemes=["bcrypt"], deprecated="auto").hash(user_dto.password, salt="a" * 21 + "e"),
             user_dto.name,
             user_dto.surname
         )

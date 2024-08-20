@@ -1,5 +1,7 @@
 from src.domain.entities.user import User
-from src.domain.value_objects import *
+from src.domain.value_objects import (
+    UserLogin, UserPassword, UserName, UserSurName
+)
 from src.application.user.dto import FullUserDto
 from src.application.auth.dto import RegistrationRequestDto
 

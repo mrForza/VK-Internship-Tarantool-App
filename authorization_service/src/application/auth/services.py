@@ -1,9 +1,13 @@
 import jwt
+from dataclasses import dataclass
 from datetime import datetime, timedelta
 from passlib.context import CryptContext
 
 from src.application.user.services import UserQueryService, UserCommandService
-from src.application.auth.dto import *
+from src.application.auth.dto import (
+    RegistrationRequestDto, RegistrationResponseDto, AuthenticationRequestDto, AuthenticationResponseDto,
+    LogoutRequestDto, LogoutResponseDto, CheckRequestDto, CheckResponseDto,
+)
 from src.application.user.mapper import UserMapper
 from src.application.auth.exceptions import UserIsNotAuthorized, IncorrectLoginOrPassword
 from src.config import JwtConfig
@@ -31,7 +35,7 @@ class JwtService:
 
     def validate_jwt_token(self, token: str) -> bool:
         try:
-            decoded = jwt.decode(
+            jwt.decode(
                 token,
                 key=jwt_config.public_key_path.read_text(),
                 algorithms=[jwt_config.algorithm]

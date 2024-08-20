@@ -39,10 +39,12 @@ class UserRepository(TarantoolRepositoy, UserReader, UserWriter):
         )
 
     async def get_all_users(self) -> List[FullUserDto]:
-        pass
+        users = (await self.conn.select('users', [])).body
+        await self.conn.disconnect()
+        return users
 
     async def create_user(self, user_dto: FullUserDto) -> None:
-        result = await self.conn.insert(
+        await self.conn.insert(
             'user',
             {
                 'login': user_dto.login,

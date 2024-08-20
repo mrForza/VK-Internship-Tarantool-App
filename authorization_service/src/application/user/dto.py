@@ -1,5 +1,5 @@
-from dataclasses import dataclass
-from typing import List, Union
+from dataclasses import dataclass, asdict
+from typing import List
 from uuid import UUID
 
 
@@ -9,23 +9,24 @@ class FullUserDto:
     password: str
     name: str
     surname: str
+    dict = asdict
 
 
 @dataclass(frozen=True)
 class ReducedUserDto:
     name: str
     surname: str
+    dict = asdict
 
 
 @dataclass(frozen=True)
 class GetProfileResponseDto(ReducedUserDto):
     email: str
     user_id: UUID
+    dict = asdict
 
 
 @dataclass(frozen=True)
 class GetAllUsersResponseDto:
     users: List[ReducedUserDto]
-    total: int
-    limit: Union[int, None]
-    offset: Union[int, None]
+    dict = asdict
