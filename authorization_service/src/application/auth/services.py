@@ -36,7 +36,6 @@ class JwtService:
                 key=jwt_config.public_key_path.read_text(),
                 algorithms=[jwt_config.algorithm]
             )
-            print(decoded)
             return True
         except (jwt.DecodeError, jwt.ExpiredSignatureError):
             return False
@@ -88,7 +87,6 @@ class AuthorizationService:
         if bearer is None or token is None:
             return CheckResponseDto('NO')
 
-        print('!' * 10, token)
         if not self.jwt_service.validate_jwt_token(token):
             return CheckResponseDto('NO')
         return CheckResponseDto('YES')

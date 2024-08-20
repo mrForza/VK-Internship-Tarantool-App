@@ -17,6 +17,7 @@ class UserRepository(TarantoolRepositoy, UserReader, UserWriter):
         if len(result.body) == 0:
             return None
         user = result.body[0]
+        await self.conn.disconnect()
         return FullUserDto(
             user.get('login'),
             user.get('password'),
@@ -29,6 +30,7 @@ class UserRepository(TarantoolRepositoy, UserReader, UserWriter):
         if len(result.body) == 0:
             return None
         user = result.body[0]
+        await self.conn.disconnect()
         return FullUserDto(
             user.get('login'),
             user.get('password'),
@@ -49,3 +51,4 @@ class UserRepository(TarantoolRepositoy, UserReader, UserWriter):
                 'surname': user_dto.surname,
             }
         )
+        await self.conn.disconnect()

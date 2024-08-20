@@ -1000,7 +1000,7 @@
 								"auth": {
 									"type": "bearer",
 									"bearer": {
-										"token": "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJSb21hbiBHcm9tb3YiLCJ1c2VybmFtZSI6IkNvcnJlY3RMb2dpbjEyMyIsImVtYWlsIjoiQ29ycmVjdExvZ2luMTIzIiwiZXhwIjoxNzI0MTQxMTk1LCJpYXQiOjE3MjQxMzkzOTV9.bhizLNDHVDp9PMWI8UBOOHA0EJFZoROdgjmVCxpGyIAAKiukiFeEknSUdLo4sNsiOIocbWlbWAHaEbzfqyAueP1u7T819-YWI6u6MiUM7hujibusPv-b9UHKQHX9W6hvBPVaR65zKFfJuwaTKE1Fy23fkyi-EGcRhM-Gf1ZkD60M6Xn5Um4mam0migx4vZB5Vgwo9DkmG14_MR5qeHpWeAZllP5COcxr_6Ti1CWQpQipD0ufPSzXtVhhY_U7j21PGCyvnC92SL5ICY3vaqtRQ1UuEAM_Jymqr_Uwgxb_pGhO-jiL_mE__J7jyainoqs2F-7I5jLshK-meOwdN68qUw"
+										"token": "{{JWT_TOKEN}}"
 									}
 								},
 								"method": "GET",
@@ -1060,7 +1060,7 @@
 							"response": []
 						},
 						{
-							"name": "Incorrect logout: bad token",
+							"name": "Incorrect logout: invalid token",
 							"event": [
 								{
 									"listen": "test",
@@ -1126,11 +1126,712 @@
 			"item": [
 				{
 					"name": "ReadKeyValues Tests",
-					"item": []
+					"item": [
+						{
+							"name": "Unauthorized Tests",
+							"item": [
+								{
+									"name": "Incorrect read: no jwt token",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"pm.test(\"Статус код должен быть 401\", function () {\r",
+													"    pm.response.to.have.status(401);\r",
+													"});\r",
+													"\r",
+													"const responseSchema = {\r",
+													"    \"type\": \"object\",\r",
+													"    \"properties\":{\r",
+													"        \"message\": {\"type\": \"string\"},\r",
+													"    },\r",
+													"    \"required\": [\"message\"],\r",
+													"    \"additionalProperties\": false\r",
+													"};\r",
+													"\r",
+													"pm.test('Структура ответа должна соответствовать ожидаемой', function () {\r",
+													"    pm.response.to.have.jsonSchema(responseSchema);\r",
+													"});\r",
+													"\r",
+													"pm.test(\"Ответ должен содержать данное сообщение об ошибке\", function () {\r",
+													"    pm.expect(pm.response.text()).to.include(\"You are not authorized! Please, sign in or sign up\");\r",
+													"});"
+												],
+												"type": "text/javascript",
+												"packages": {}
+											}
+										}
+									],
+									"request": {
+										"auth": {
+											"type": "noauth"
+										},
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n    \"keys\": [\"some\", \"keys\"]\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": "{{KEY_VALUE_SERVICE_HOST}}/{{READ_KV_PATH}}"
+									},
+									"response": []
+								},
+								{
+									"name": "Incorrect read: invalid jwt token",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"pm.test(\"Статус код должен быть 401\", function () {\r",
+													"    pm.response.to.have.status(401);\r",
+													"});\r",
+													"\r",
+													"const responseSchema = {\r",
+													"    \"type\": \"object\",\r",
+													"    \"properties\":{\r",
+													"        \"message\": {\"type\": \"string\"},\r",
+													"    },\r",
+													"    \"required\": [\"message\"],\r",
+													"    \"additionalProperties\": false\r",
+													"};\r",
+													"\r",
+													"pm.test('Структура ответа должна соответствовать ожидаемой', function () {\r",
+													"    pm.response.to.have.jsonSchema(responseSchema);\r",
+													"});\r",
+													"\r",
+													"pm.test(\"Ответ должен содержать данное сообщение об ошибке\", function () {\r",
+													"    pm.expect(pm.response.text()).to.include(\"You are not authorized! Please, sign in or sign up\");\r",
+													"});"
+												],
+												"type": "text/javascript",
+												"packages": {}
+											}
+										}
+									],
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": {
+												"token": "tut23923ht923gh9234ghui34hgi34ough33g4_invalid_jwt_token"
+											}
+										},
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n    \"keys\": [\"some\", \"keys\"]\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": "{{KEY_VALUE_SERVICE_HOST}}/{{READ_KV_PATH}}"
+									},
+									"response": []
+								}
+							]
+						},
+						{
+							"name": "Authenticate NO TEST",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"const jsonData =pm.response.json()\r",
+											"pm.environment.set(\r",
+											"    \"JWT_TOKEN\",\r",
+											"    jsonData['token']\r",
+											");"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"login\": \"CorrectLogin123\",\r\n    \"password\": \"Correct_Passw00rd123(&)^(\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": "{{AUTHORIZATION_SERVICE_HOST}}/{{AUTHENTICATION_PATH}}"
+							},
+							"response": []
+						},
+						{
+							"name": "Write Data NO TEST",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": {
+										"token": "{{JWT_TOKEN}}"
+									}
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"data\": {\r\n        \"Key - Value (int)\": 1,\r\n        \"Key - Value (string)\": \"Lorem ipsum doler sit amet\",\r\n        \"Key - Value (float)\": 3.14,\r\n        \"Key - Value (list)\": [\"a\", \"b\", \"c\"],\r\n        \"Key - Value (dict)\": {\r\n            \"1\": 1111111,\r\n            \"2\": 2222222,\r\n            \"0\": 0\r\n        },\r\n        \"Key - Value (large nesting)\": [\r\n            {\r\n                \"a\": {\r\n                    \"a2\": [1, 2, 3]\r\n                },\r\n                \"b\": [\r\n                    1,\r\n                    2,\r\n                    {\r\n                        \"q\": \"w\",\r\n                        \"e\": \"r\"\r\n                    }\r\n                ]\r\n            },\r\n            {\r\n                \"1\": [1, 2, 3],\r\n                \"2\": [4, 5, 6]\r\n            },\r\n            {\r\n                \"3\": {\r\n                    \"3.2\": 3.2,\r\n                    \"3.3.\": 3.3\r\n                }\r\n            }\r\n        ]\r\n    }   \r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": "{{KEY_VALUE_SERVICE_HOST}}/{{WRITE_KV_PATH}}"
+							},
+							"response": []
+						},
+						{
+							"name": "Incorrect read: no keys",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Статус код должен быть 400\", function () {\r",
+											"    pm.response.to.have.status(400);\r",
+											"});\r",
+											"\r",
+											"const responseSchema = {\r",
+											"    \"type\": \"object\",\r",
+											"    \"properties\":{\r",
+											"        \"message\": {\"type\": \"string\"},\r",
+											"    },\r",
+											"    \"required\": [\"message\"],\r",
+											"    \"additionalProperties\": false\r",
+											"};\r",
+											"\r",
+											"pm.test('Структура ответа должна соответствовать ожидаемой', function () {\r",
+											"    pm.response.to.have.jsonSchema(responseSchema);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Ответ должен содержать данное сообщение об ошибке\", function () {\r",
+											"    pm.expect(pm.response.text()).to.include(\"Incorrect keys: you have not passed any keys\");\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": {
+										"token": "{{JWT_TOKEN}}"
+									}
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"keys\": []\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": "{{KEY_VALUE_SERVICE_HOST}}/{{READ_KV_PATH}}"
+							},
+							"response": []
+						},
+						{
+							"name": "Incorrect read: duplicated keys",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Статус код должен быть 400\", function () {\r",
+											"    pm.response.to.have.status(400);\r",
+											"});\r",
+											"\r",
+											"const responseSchema = {\r",
+											"    \"type\": \"object\",\r",
+											"    \"properties\":{\r",
+											"        \"message\": {\"type\": \"string\"},\r",
+											"    },\r",
+											"    \"required\": [\"message\"],\r",
+											"    \"additionalProperties\": false\r",
+											"};\r",
+											"\r",
+											"pm.test('Структура ответа должна соответствовать ожидаемой', function () {\r",
+											"    pm.response.to.have.jsonSchema(responseSchema);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Ответ должен содержать данное сообщение об ошибке\", function () {\r",
+											"    pm.expect(pm.response.text()).to.include(\"Incorrect keys: you cannot pass identical keys:\");\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": {
+										"token": "{{JWT_TOKEN}}"
+									}
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"keys\": [\"key1\", \"key1\", \"key1\"]\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": "{{KEY_VALUE_SERVICE_HOST}}/{{READ_KV_PATH}}"
+							},
+							"response": []
+						},
+						{
+							"name": "Incorrect read: not existing key",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Статус код должен быть 400\", function () {\r",
+											"    pm.response.to.have.status(400);\r",
+											"});\r",
+											"\r",
+											"const responseSchema = {\r",
+											"    \"type\": \"object\",\r",
+											"    \"properties\":{\r",
+											"        \"message\": {\"type\": \"string\"},\r",
+											"    },\r",
+											"    \"required\": [\"message\"],\r",
+											"    \"additionalProperties\": false\r",
+											"};\r",
+											"\r",
+											"pm.test('Структура ответа должна соответствовать ожидаемой', function () {\r",
+											"    pm.response.to.have.jsonSchema(responseSchema);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Ответ должен содержать данное сообщение об ошибке\", function () {\r",
+											"    pm.expect(pm.response.text()).to.include(\"These keys don't exist:\");\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": {
+										"token": "{{JWT_TOKEN}}"
+									}
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"keys\": [\"key1\", \"key2\"]\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": "{{KEY_VALUE_SERVICE_HOST}}/{{READ_KV_PATH}}"
+							},
+							"response": []
+						},
+						{
+							"name": "Correct read",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Статус код должен быть 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});\r",
+											"\r",
+											"\r",
+											"pm.test(\"Ответ должен содержать данное сообщение об ошибке\", function () {\r",
+											"    pm.expect(pm.response.text()).to.include(\"Lorem ipsum doler sit amet\");\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Ответ должен содержать данное сообщение об ошибке\", function () {\r",
+											"    pm.expect(pm.response.text()).to.include(\"1\");\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Ответ должен содержать данное сообщение об ошибке\", function () {\r",
+											"    pm.expect(pm.response.text()).to.include(\"1111111\");\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": {
+										"token": "{{JWT_TOKEN}}"
+									}
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"keys\": [\r\n        \"Key - Value (int)\",\r\n        \"Key - Value (string)\",\r\n        \"Key - Value (float)\",\r\n        \"Key - Value (list)\",\r\n        \"Key - Value (dict)\",\r\n        \"Key - Value (large nesting)\"\r\n    ]\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": "{{KEY_VALUE_SERVICE_HOST}}/{{READ_KV_PATH}}"
+							},
+							"response": []
+						}
+					]
 				},
 				{
 					"name": "WriteKeyValues Tests",
-					"item": []
+					"item": [
+						{
+							"name": "Unauthorized Tests Copy",
+							"item": [
+								{
+									"name": "Incorrect write: no jwt token",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"pm.test(\"Статус код должен быть 401\", function () {\r",
+													"    pm.response.to.have.status(401);\r",
+													"});\r",
+													"\r",
+													"const responseSchema = {\r",
+													"    \"type\": \"object\",\r",
+													"    \"properties\":{\r",
+													"        \"message\": {\"type\": \"string\"},\r",
+													"    },\r",
+													"    \"required\": [\"message\"],\r",
+													"    \"additionalProperties\": false\r",
+													"};\r",
+													"\r",
+													"pm.test('Структура ответа должна соответствовать ожидаемой', function () {\r",
+													"    pm.response.to.have.jsonSchema(responseSchema);\r",
+													"});\r",
+													"\r",
+													"pm.test(\"Ответ должен содержать данное сообщение об ошибке\", function () {\r",
+													"    pm.expect(pm.response.text()).to.include(\"You are not authorized! Please, sign in or sign up\");\r",
+													"});"
+												],
+												"type": "text/javascript",
+												"packages": {}
+											}
+										}
+									],
+									"request": {
+										"auth": {
+											"type": "noauth"
+										},
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n    \"data\": {\r\n        \"key1\": \"value1\"\r\n    }\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": "{{KEY_VALUE_SERVICE_HOST}}/{{WRITE_KV_PATH}}"
+									},
+									"response": []
+								},
+								{
+									"name": "Incorrect write: invalid jwt token",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"pm.test(\"Статус код должен быть 401\", function () {\r",
+													"    pm.response.to.have.status(401);\r",
+													"});\r",
+													"\r",
+													"const responseSchema = {\r",
+													"    \"type\": \"object\",\r",
+													"    \"properties\":{\r",
+													"        \"message\": {\"type\": \"string\"},\r",
+													"    },\r",
+													"    \"required\": [\"message\"],\r",
+													"    \"additionalProperties\": false\r",
+													"};\r",
+													"\r",
+													"pm.test('Структура ответа должна соответствовать ожидаемой', function () {\r",
+													"    pm.response.to.have.jsonSchema(responseSchema);\r",
+													"});\r",
+													"\r",
+													"pm.test(\"Ответ должен содержать данное сообщение об ошибке\", function () {\r",
+													"    pm.expect(pm.response.text()).to.include(\"You are not authorized! Please, sign in or sign up\");\r",
+													"});"
+												],
+												"type": "text/javascript",
+												"packages": {}
+											}
+										}
+									],
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": {
+												"token": "tut23923ht923gh9234ghui34hgi34ough33g4_invalid_jwt_token"
+											}
+										},
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n    \"data\": {\r\n        \"key1\": \"value1\"\r\n    }\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": "{{KEY_VALUE_SERVICE_HOST}}/{{WRITE_KV_PATH}}"
+									},
+									"response": []
+								}
+							]
+						},
+						{
+							"name": "Authenticate NO TEST",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"const jsonData =pm.response.json()\r",
+											"pm.environment.set(\r",
+											"    \"JWT_TOKEN\",\r",
+											"    jsonData['token']\r",
+											");"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"login\": \"CorrectLogin123\",\r\n    \"password\": \"Correct_Passw00rd123(&)^(\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": "{{AUTHORIZATION_SERVICE_HOST}}/{{AUTHENTICATION_PATH}}"
+							},
+							"response": []
+						},
+						{
+							"name": "Incorrect write: no keys",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Статус код должен быть 400\", function () {\r",
+											"    pm.response.to.have.status(400);\r",
+											"});\r",
+											"\r",
+											"const responseSchema = {\r",
+											"    \"type\": \"object\",\r",
+											"    \"properties\":{\r",
+											"        \"message\": {\"type\": \"string\"},\r",
+											"    },\r",
+											"    \"required\": [\"message\"],\r",
+											"    \"additionalProperties\": false\r",
+											"};\r",
+											"\r",
+											"pm.test('Структура ответа должна соответствовать ожидаемой', function () {\r",
+											"    pm.response.to.have.jsonSchema(responseSchema);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Ответ должен содержать данное сообщение об ошибке\", function () {\r",
+											"    pm.expect(pm.response.text()).to.include(\"Incorrect keys: you have not passed any keys\");\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": {
+										"token": "{{JWT_TOKEN}}"
+									}
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"data\": {\r\n        \r\n    }\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": "{{KEY_VALUE_SERVICE_HOST}}/{{WRITE_KV_PATH}}"
+							},
+							"response": []
+						},
+						{
+							"name": "Incorrect write: duplicated keys",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Статус код должен быть 201\", function () {\r",
+											"    pm.response.to.have.status(201);\r",
+											"});\r",
+											"\r",
+											"const responseSchema = {\r",
+											"    \"type\": \"object\",\r",
+											"    \"properties\":{\r",
+											"        \"status\": {\"type\": \"string\"},\r",
+											"    },\r",
+											"    \"required\": [\"status\"],\r",
+											"    \"additionalProperties\": false\r",
+											"};\r",
+											"\r",
+											"pm.test('Структура ответа должна соответствовать ожидаемой', function () {\r",
+											"    pm.response.to.have.jsonSchema(responseSchema);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"JSON по дефолту удаляет повторяющиеся ключи\", function () {\r",
+											"    true\r",
+											"});\r",
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": {
+										"token": "{{JWT_TOKEN}}"
+									}
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"data\": {\r\n        \"key1\": 1,\r\n        \"key1\": 3\r\n    }\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": "{{KEY_VALUE_SERVICE_HOST}}/{{WRITE_KV_PATH}}"
+							},
+							"response": []
+						},
+						{
+							"name": "Correct write",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Статус код должен быть 201\", function () {\r",
+											"    pm.response.to.have.status(201);\r",
+											"});\r",
+											"\r",
+											"const responseSchema = {\r",
+											"    \"type\": \"object\",\r",
+											"    \"properties\":{\r",
+											"        \"status\": {\"type\": \"string\"},\r",
+											"    },\r",
+											"    \"required\": [\"status\"],\r",
+											"    \"additionalProperties\": false\r",
+											"};\r",
+											"\r",
+											"pm.test('Структура ответа должна соответствовать ожидаемой', function () {\r",
+											"    pm.response.to.have.jsonSchema(responseSchema);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"JSON по дефолту удаляет повторяющиеся ключи\", function () {\r",
+											"    pm.expect(pm.response.text()).to.include(\"success\");\r",
+											"});\r",
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": {
+										"token": "{{JWT_TOKEN}}"
+									}
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"data\": {\r\n        \"alphabet\": [\r\n            \"a\",\r\n            \"b\",\r\n            \".\",\r\n            \".\",\r\n            \".\",\r\n            \"z\"\r\n        ],\r\n        \"numbers_and_hexes\": {\r\n            \"123\": \"7B\",\r\n            \"777\": \"309\",\r\n            \"1238\": \"4D6\",\r\n            \"805\": \"325\",\r\n            \"786487654\": \"2EE0D966\"\r\n        },\r\n        \"nested_key\": {\r\n            \"a\": {\r\n                \"1\": [\r\n                    {\r\n                        \"a\": \"b\"\r\n                    }\r\n                ],\r\n                \"2\": {\r\n                  \"1\": \"2\"  \r\n                },\r\n                \"3\": 1.123495\r\n            },\r\n            \"b\": {\r\n                \"lorem\": \"ipsum\"\r\n            }\r\n        }\r\n    }\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": "{{KEY_VALUE_SERVICE_HOST}}/{{WRITE_KV_PATH}}"
+							},
+							"response": []
+						}
+					]
 				}
 			]
 		}
