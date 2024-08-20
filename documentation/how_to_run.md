@@ -17,7 +17,7 @@
 
 4) Собираем проект
     ``` bash
-    docker compose bild
+    docker compose build
     ```
 
 5) Запускаем проект
