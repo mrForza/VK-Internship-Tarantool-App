@@ -2,6 +2,15 @@ version: '3.8'
 
 
 services:
+  utils_service:
+    container_name: 'utils_service'
+    build: ./tarantool_infra/utils
+    depends_on:
+      - authorization_tarantool_db
+    ports:
+      - 8088:8088
+    networks:
+      - main_net
 
   authorization_service:
     container_name: 'authorization_service'

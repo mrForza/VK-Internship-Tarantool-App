@@ -5,9 +5,9 @@ local user_space = box.schema.create_space(
     {
         format={
             {name='login', type='string'},
+            {name='password', type='string'},
             {name='name', type='string'},
             {name='surname', type='string'},
-            {name='password', type='string'}
         },
         if_not_exists=true
     }

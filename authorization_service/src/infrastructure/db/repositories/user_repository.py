@@ -32,10 +32,10 @@ class UserRepository(TarantoolRepositoy, UserReader, UserWriter):
         user = result.body[0]
         await self.conn.disconnect()
         return FullUserDto(
-            user.get('login'),
-            user.get('password'),
-            user.get('name'),
-            user.get('surname')
+            login=user.get('login'),
+            password=user.get('password'),
+            name=user.get('name'),
+            surname=user.get('surname')
         )
 
     async def get_all_users(self) -> List[FullUserDto]:
