@@ -1,0 +1,1144 @@
+{
+	"info": {
+		"_postman_id": "a9f30c4e-4d24-4403-a2b5-912ed1e0aed2",
+		"name": "VK Internship Integration Tests",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json",
+		"_exporter_id": "28233508"
+	},
+	"item": [
+		{
+			"name": "Authorization Service Tests",
+			"item": [
+				{
+					"name": "Registration Tests",
+					"item": [
+						{
+							"name": "Login Tests",
+							"item": [
+								{
+									"name": "Incorrect login: so small",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"pm.test(\"Статус код должен быть 400\", function () {\r",
+													"    pm.response.to.have.status(400);\r",
+													"});\r",
+													"\r",
+													"const responseSchema = {\r",
+													"    \"type\": \"object\",\r",
+													"    \"properties\":{\r",
+													"        \"message\": {\"type\": \"string\"},\r",
+													"    },\r",
+													"    \"required\": [\"message\"],\r",
+													"    \"additionalProperties\": false\r",
+													"};\r",
+													"\r",
+													"pm.test('Структура ответа должна соответствовать ожидаемой', function () {\r",
+													"    pm.response.to.have.jsonSchema(responseSchema);\r",
+													"});\r",
+													"\r",
+													"pm.test(\"Ответ должен содержать данное сообщение об ошибке\", function () {\r",
+													"    pm.expect(pm.response.text()).to.include(\"Incorrect login: the length should be no less than 2 symbols\");\r",
+													"});"
+												],
+												"type": "text/javascript",
+												"packages": {}
+											}
+										},
+										{
+											"listen": "prerequest",
+											"script": {
+												"exec": [
+													""
+												],
+												"type": "text/javascript",
+												"packages": {}
+											}
+										}
+									],
+									"request": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n    \"login\": \"q\",\r\n    \"password\": \"Correct_Passw00rd123(&)^(\",\r\n    \"name\": \"Roman\",\r\n    \"surname\": \"Gromov\"\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": "{{AUTHORIZATION_SERVICE_HOST}}/{{REGISTRATION_PATH}}"
+									},
+									"response": []
+								},
+								{
+									"name": "Incorrect login: so huge",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"pm.test(\"Статус код должен быть 400\", function () {\r",
+													"    pm.response.to.have.status(400);\r",
+													"});\r",
+													"\r",
+													"const responseSchema = {\r",
+													"    \"type\": \"object\",\r",
+													"    \"properties\":{\r",
+													"        \"message\": {\"type\": \"string\"},\r",
+													"    },\r",
+													"    \"required\": [\"message\"],\r",
+													"    \"additionalProperties\": false\r",
+													"};\r",
+													"\r",
+													"pm.test('Структура ответа должна соответствовать ожидаемой', function () {\r",
+													"    pm.response.to.have.jsonSchema(responseSchema);\r",
+													"});\r",
+													"\r",
+													"pm.test(\"Ответ должен содержать данное сообщение об ошибке\", function () {\r",
+													"    pm.expect(pm.response.text()).to.include(\"Incorrect login: the length should be no more than 64 symbols\");\r",
+													"});"
+												],
+												"type": "text/javascript",
+												"packages": {}
+											}
+										}
+									],
+									"request": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n    \"login\": \"BIG1LOGIN1MORE1THAN64SYMBOLSBIG1LOGIN1MORE1THAN64SYMBOLSBIG1LOGIN1MORE1THAN64SYMBOL\",\r\n    \"password\": \"Correct7689F)*234\",\r\n    \"name\": \"Roman\",\r\n    \"surname\": \"Gromov\"\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": "{{AUTHORIZATION_SERVICE_HOST}}/{{REGISTRATION_PATH}}"
+									},
+									"response": []
+								},
+								{
+									"name": "Incorrect login: bad symbols",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"pm.test(\"Статус код должен быть 400\", function () {\r",
+													"    pm.response.to.have.status(400);\r",
+													"});\r",
+													"\r",
+													"const responseSchema = {\r",
+													"    \"type\": \"object\",\r",
+													"    \"properties\":{\r",
+													"        \"message\": {\"type\": \"string\"},\r",
+													"    },\r",
+													"    \"required\": [\"message\"],\r",
+													"    \"additionalProperties\": false\r",
+													"};\r",
+													"\r",
+													"pm.test('Структура ответа должна соответствовать ожидаемой', function () {\r",
+													"    pm.response.to.have.jsonSchema(responseSchema);\r",
+													"});\r",
+													"\r",
+													"pm.test(\"Ответ должен содержать данное сообщение об ошибке\", function () {\r",
+													"    pm.expect(pm.response.text()).to.include(\"Incorrect login: login should have onlu lower-upper latin letters and digits\");\r",
+													"});"
+												],
+												"type": "text/javascript",
+												"packages": {}
+											}
+										}
+									],
+									"request": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n    \"login\": \"SpecialSymbols+!@#_)\",\r\n    \"password\": \"Correct7689F)*234\",\r\n    \"name\": \"Roman\",\r\n    \"surname\": \"Gromov\"\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": "{{AUTHORIZATION_SERVICE_HOST}}/{{REGISTRATION_PATH}}"
+									},
+									"response": []
+								}
+							]
+						},
+						{
+							"name": "Password Tests",
+							"item": [
+								{
+									"name": "Incorrect password: so small",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"pm.test(\"Статус код должен быть 400\", function () {\r",
+													"    pm.response.to.have.status(400);\r",
+													"});\r",
+													"\r",
+													"const responseSchema = {\r",
+													"    \"type\": \"object\",\r",
+													"    \"properties\":{\r",
+													"        \"message\": {\"type\": \"string\"},\r",
+													"    },\r",
+													"    \"required\": [\"message\"],\r",
+													"    \"additionalProperties\": false\r",
+													"};\r",
+													"\r",
+													"pm.test('Структура ответа должна соответствовать ожидаемой', function () {\r",
+													"    pm.response.to.have.jsonSchema(responseSchema);\r",
+													"});\r",
+													"\r",
+													"pm.test(\"Ответ должен содержать данное сообщение об ошибке\", function () {\r",
+													"    pm.expect(pm.response.text()).to.include(\"Incorrect password: the length should be no less than 8 symbols\");\r",
+													"});"
+												],
+												"type": "text/javascript",
+												"packages": {}
+											}
+										}
+									],
+									"request": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n    \"login\": \"GoodLogin123\",\r\n    \"password\": \"short\",\r\n    \"name\": \"Roman\",\r\n    \"surname\": \"Gromov\"\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": "{{AUTHORIZATION_SERVICE_HOST}}/{{REGISTRATION_PATH}}"
+									},
+									"response": []
+								},
+								{
+									"name": "Incorrect password: so huge",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"pm.test(\"Статус код должен быть 400\", function () {\r",
+													"    pm.response.to.have.status(400);\r",
+													"});\r",
+													"\r",
+													"const responseSchema = {\r",
+													"    \"type\": \"object\",\r",
+													"    \"properties\":{\r",
+													"        \"message\": {\"type\": \"string\"},\r",
+													"    },\r",
+													"    \"required\": [\"message\"],\r",
+													"    \"additionalProperties\": false\r",
+													"};\r",
+													"\r",
+													"pm.test('Структура ответа должна соответствовать ожидаемой', function () {\r",
+													"    pm.response.to.have.jsonSchema(responseSchema);\r",
+													"});\r",
+													"\r",
+													"pm.test(\"Ответ должен содержать данное сообщение об ошибке\", function () {\r",
+													"    pm.expect(pm.response.text()).to.include(\"Incorrect password: the length should be no more than 64 symbols\");\r",
+													"});"
+												],
+												"type": "text/javascript",
+												"packages": {}
+											}
+										}
+									],
+									"request": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n    \"login\": \"GoodLogin123\",\r\n    \"password\": \"bigbigbigbigbigbigbigbigbigbigbigbigbigbigbigbigbigbigbigbigbigbig\",\r\n    \"name\": \"Roman\",\r\n    \"surname\": \"Gromov\"\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": "{{AUTHORIZATION_SERVICE_HOST}}/{{REGISTRATION_PATH}}"
+									},
+									"response": []
+								},
+								{
+									"name": "Incorrect password: no lower case letters",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"pm.test(\"Статус код должен быть 400\", function () {\r",
+													"    pm.response.to.have.status(400);\r",
+													"});\r",
+													"\r",
+													"const responseSchema = {\r",
+													"    \"type\": \"object\",\r",
+													"    \"properties\":{\r",
+													"        \"message\": {\"type\": \"string\"},\r",
+													"    },\r",
+													"    \"required\": [\"message\"],\r",
+													"    \"additionalProperties\": false\r",
+													"};\r",
+													"\r",
+													"pm.test('Структура ответа должна соответствовать ожидаемой', function () {\r",
+													"    pm.response.to.have.jsonSchema(responseSchema);\r",
+													"});\r",
+													"\r",
+													"pm.test(\"Ответ должен содержать данное сообщение об ошибке\", function () {\r",
+													"    pm.expect(pm.response.text()).to.include(\"Incorrect password: the password should have at least one LOWER_CASE\");\r",
+													"});"
+												],
+												"type": "text/javascript",
+												"packages": {}
+											}
+										}
+									],
+									"request": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n    \"login\": \"GoodLogin123\",\r\n    \"password\": \"NO_LOWER_CASE_LETTERS_123\",\r\n    \"name\": \"Roman\",\r\n    \"surname\": \"Gromov\"\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": "{{AUTHORIZATION_SERVICE_HOST}}/{{REGISTRATION_PATH}}"
+									},
+									"response": []
+								},
+								{
+									"name": "Incorrect password: no upper case letters",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"pm.test(\"Статус код должен быть 400\", function () {\r",
+													"    pm.response.to.have.status(400);\r",
+													"});\r",
+													"\r",
+													"const responseSchema = {\r",
+													"    \"type\": \"object\",\r",
+													"    \"properties\":{\r",
+													"        \"message\": {\"type\": \"string\"},\r",
+													"    },\r",
+													"    \"required\": [\"message\"],\r",
+													"    \"additionalProperties\": false\r",
+													"};\r",
+													"\r",
+													"pm.test('Структура ответа должна соответствовать ожидаемой', function () {\r",
+													"    pm.response.to.have.jsonSchema(responseSchema);\r",
+													"});\r",
+													"\r",
+													"pm.test(\"Ответ должен содержать данное сообщение об ошибке\", function () {\r",
+													"    pm.expect(pm.response.text()).to.include(\"Incorrect password: the password should have at least one UPPER_CASE\");\r",
+													"});"
+												],
+												"type": "text/javascript",
+												"packages": {}
+											}
+										}
+									],
+									"request": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n    \"login\": \"GoodLogin123\",\r\n    \"password\": \"no_upper_case_lettes_123\",\r\n    \"name\": \"Roman\",\r\n    \"surname\": \"Gromov\"\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": "{{AUTHORIZATION_SERVICE_HOST}}/{{REGISTRATION_PATH}}"
+									},
+									"response": []
+								},
+								{
+									"name": "Incorrect password: no special symbols",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"pm.test(\"Статус код должен быть 400\", function () {\r",
+													"    pm.response.to.have.status(400);\r",
+													"});\r",
+													"\r",
+													"const responseSchema = {\r",
+													"    \"type\": \"object\",\r",
+													"    \"properties\":{\r",
+													"        \"message\": {\"type\": \"string\"},\r",
+													"    },\r",
+													"    \"required\": [\"message\"],\r",
+													"    \"additionalProperties\": false\r",
+													"};\r",
+													"\r",
+													"pm.test('Структура ответа должна соответствовать ожидаемой', function () {\r",
+													"    pm.response.to.have.jsonSchema(responseSchema);\r",
+													"});\r",
+													"\r",
+													"pm.test(\"Ответ должен содержать данное сообщение об ошибке\", function () {\r",
+													"    pm.expect(pm.response.text()).to.include(\"Incorrect password: the password should have at least one SPECIAL_SYMBOLS\");\r",
+													"});"
+												],
+												"type": "text/javascript",
+												"packages": {}
+											}
+										}
+									],
+									"request": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n    \"login\": \"GoodLogin123\",\r\n    \"password\": \"No1Special1Symbols\",\r\n    \"name\": \"Roman\",\r\n    \"surname\": \"Gromov\"\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": "{{AUTHORIZATION_SERVICE_HOST}}/{{REGISTRATION_PATH}}"
+									},
+									"response": []
+								},
+								{
+									"name": "Incorrect password: no digits",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"pm.test(\"Статус код должен быть 400\", function () {\r",
+													"    pm.response.to.have.status(400);\r",
+													"});\r",
+													"\r",
+													"const responseSchema = {\r",
+													"    \"type\": \"object\",\r",
+													"    \"properties\":{\r",
+													"        \"message\": {\"type\": \"string\"},\r",
+													"    },\r",
+													"    \"required\": [\"message\"],\r",
+													"    \"additionalProperties\": false\r",
+													"};\r",
+													"\r",
+													"pm.test('Структура ответа должна соответствовать ожидаемой', function () {\r",
+													"    pm.response.to.have.jsonSchema(responseSchema);\r",
+													"});\r",
+													"\r",
+													"pm.test(\"Ответ должен содержать данное сообщение об ошибке\", function () {\r",
+													"    pm.expect(pm.response.text()).to.include(\"Incorrect password: the password should have at least one DIGITS\");\r",
+													"});"
+												],
+												"type": "text/javascript",
+												"packages": {}
+											}
+										}
+									],
+									"request": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n    \"login\": \"GoodLogin123\",\r\n    \"password\": \"No_Digits\",\r\n    \"name\": \"Roman\",\r\n    \"surname\": \"Gromov\"\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": "{{AUTHORIZATION_SERVICE_HOST}}/{{REGISTRATION_PATH}}"
+									},
+									"response": []
+								}
+							]
+						},
+						{
+							"name": "Initials Tests",
+							"item": [
+								{
+									"name": "Incorrect initial: so small",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"pm.test(\"Статус код должен быть 400\", function () {\r",
+													"    pm.response.to.have.status(400);\r",
+													"});\r",
+													"\r",
+													"const responseSchema = {\r",
+													"    \"type\": \"object\",\r",
+													"    \"properties\":{\r",
+													"        \"message\": {\"type\": \"string\"},\r",
+													"    },\r",
+													"    \"required\": [\"message\"],\r",
+													"    \"additionalProperties\": false\r",
+													"};\r",
+													"\r",
+													"pm.test('Структура ответа должна соответствовать ожидаемой', function () {\r",
+													"    pm.response.to.have.jsonSchema(responseSchema);\r",
+													"});\r",
+													"\r",
+													"pm.test(\"Ответ должен содержать данное сообщение об ошибке\", function () {\r",
+													"    pm.expect(pm.response.text()).to.include(\"Incorrect initial: the length should be no less than 2 symbols\");\r",
+													"});"
+												],
+												"type": "text/javascript",
+												"packages": {}
+											}
+										}
+									],
+									"request": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n    \"login\": \"CorrectLogin123\",\r\n    \"password\": \"Correct7689F)*234\",\r\n    \"name\": \"a\",\r\n    \"surname\": \"Gromov\"\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": "{{AUTHORIZATION_SERVICE_HOST}}/{{REGISTRATION_PATH}}"
+									},
+									"response": []
+								},
+								{
+									"name": "Incorrect initial: so huge",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"pm.test(\"Статус код должен быть 400\", function () {\r",
+													"    pm.response.to.have.status(400);\r",
+													"});\r",
+													"\r",
+													"const responseSchema = {\r",
+													"    \"type\": \"object\",\r",
+													"    \"properties\":{\r",
+													"        \"message\": {\"type\": \"string\"},\r",
+													"    },\r",
+													"    \"required\": [\"message\"],\r",
+													"    \"additionalProperties\": false\r",
+													"};\r",
+													"\r",
+													"pm.test('Структура ответа должна соответствовать ожидаемой', function () {\r",
+													"    pm.response.to.have.jsonSchema(responseSchema);\r",
+													"});\r",
+													"\r",
+													"pm.test(\"Ответ должен содержать данное сообщение об ошибке\", function () {\r",
+													"    pm.expect(pm.response.text()).to.include(\"Incorrect initial: the length should be no more than 32 symbols\");\r",
+													"});"
+												],
+												"type": "text/javascript",
+												"packages": {}
+											}
+										}
+									],
+									"request": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n    \"login\": \"CorrectLogin123\",\r\n    \"password\": \"Correct7689F)*234\",\r\n    \"name\": \"qweqweqweqweqweqweqweqweqweqweqweqweqweqweqwe\",\r\n    \"surname\": \"Gromov\"\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": "{{AUTHORIZATION_SERVICE_HOST}}/{{REGISTRATION_PATH}}"
+									},
+									"response": []
+								},
+								{
+									"name": "Incorrect initial: with digits",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"pm.test(\"Статус код должен быть 400\", function () {\r",
+													"    pm.response.to.have.status(400);\r",
+													"});\r",
+													"\r",
+													"const responseSchema = {\r",
+													"    \"type\": \"object\",\r",
+													"    \"properties\":{\r",
+													"        \"message\": {\"type\": \"string\"},\r",
+													"    },\r",
+													"    \"required\": [\"message\"],\r",
+													"    \"additionalProperties\": false\r",
+													"};\r",
+													"\r",
+													"pm.test('Структура ответа должна соответствовать ожидаемой', function () {\r",
+													"    pm.response.to.have.jsonSchema(responseSchema);\r",
+													"});\r",
+													"\r",
+													"pm.test(\"Ответ должен содержать данное сообщение об ошибке\", function () {\r",
+													"    pm.expect(pm.response.text()).to.include(\"Incorrect initial: initial should have only lower-upper latin letters\");\r",
+													"});"
+												],
+												"type": "text/javascript",
+												"packages": {}
+											}
+										}
+									],
+									"request": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n    \"login\": \"CorrectLogin123\",\r\n    \"password\": \"Correct7689F)*234\",\r\n    \"name\": \"Roman123\",\r\n    \"surname\": \"Gromov\"\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": "{{AUTHORIZATION_SERVICE_HOST}}/{{REGISTRATION_PATH}}"
+									},
+									"response": []
+								},
+								{
+									"name": "Incorrect initial: with special symbols",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"pm.test(\"Статус код должен быть 400\", function () {\r",
+													"    pm.response.to.have.status(400);\r",
+													"});\r",
+													"\r",
+													"const responseSchema = {\r",
+													"    \"type\": \"object\",\r",
+													"    \"properties\":{\r",
+													"        \"message\": {\"type\": \"string\"},\r",
+													"    },\r",
+													"    \"required\": [\"message\"],\r",
+													"    \"additionalProperties\": false\r",
+													"};\r",
+													"\r",
+													"pm.test('Структура ответа должна соответствовать ожидаемой', function () {\r",
+													"    pm.response.to.have.jsonSchema(responseSchema);\r",
+													"});\r",
+													"\r",
+													"pm.test(\"Ответ должен содержать данное сообщение об ошибке\", function () {\r",
+													"    pm.expect(pm.response.text()).to.include(\"Incorrect initial: initial should have only lower-upper latin letters\");\r",
+													"});"
+												],
+												"type": "text/javascript",
+												"packages": {}
+											}
+										}
+									],
+									"request": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n    \"login\": \"CorrectLogin123\",\r\n    \"password\": \"Correct7689F)*234\",\r\n    \"name\": \"----\",\r\n    \"surname\": \"Gromov\"\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": "{{AUTHORIZATION_SERVICE_HOST}}/{{REGISTRATION_PATH}}"
+									},
+									"response": []
+								}
+							]
+						},
+						{
+							"name": "Correct registration",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Статус код должен быть 201\", function () {\r",
+											"    pm.response.to.have.status(201);\r",
+											"});\r",
+											"\r",
+											"const responseSchema = {\r",
+											"    \"type\": \"object\",\r",
+											"    \"properties\":{\r",
+											"        \"message\": {\"type\": \"string\"},\r",
+											"    },\r",
+											"    \"required\": [\"message\"],\r",
+											"    \"additionalProperties\": false\r",
+											"};\r",
+											"\r",
+											"pm.test('Структура ответа должна соответствовать ожидаемой', function () {\r",
+											"    pm.response.to.have.jsonSchema(responseSchema);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Ответ должен содержать данное сообщение об ошибке\", function () {\r",
+											"    pm.expect(pm.response.text()).to.include(\"You have been successfully registered!\");\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"login\": \"CorrectLogin123\",\r\n    \"password\": \"Correct_Passw00rd123(&)^(\",\r\n    \"name\": \"Roman\",\r\n    \"surname\": \"Gromov\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": "{{AUTHORIZATION_SERVICE_HOST}}/{{REGISTRATION_PATH}}"
+							},
+							"response": []
+						},
+						{
+							"name": "Incorrect registration: user already exists",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Статус код должен быть 400\", function () {\r",
+											"    pm.response.to.have.status(400);\r",
+											"});\r",
+											"\r",
+											"const responseSchema = {\r",
+											"    \"type\": \"object\",\r",
+											"    \"properties\":{\r",
+											"        \"message\": {\"type\": \"string\"},\r",
+											"    },\r",
+											"    \"required\": [\"message\"],\r",
+											"    \"additionalProperties\": false\r",
+											"};\r",
+											"\r",
+											"pm.test('Структура ответа должна соответствовать ожидаемой', function () {\r",
+											"    pm.response.to.have.jsonSchema(responseSchema);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Ответ должен содержать данное сообщение об ошибке\", function () {\r",
+											"    pm.expect(pm.response.text()).to.include(\"user with this login is already exists\");\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"login\": \"CorrectLogin123\",\r\n    \"password\": \"Correct_Passw00rd123(&)^(\",\r\n    \"name\": \"Roman\",\r\n    \"surname\": \"Gromov\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": "{{AUTHORIZATION_SERVICE_HOST}}/{{REGISTRATION_PATH}}"
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Authentication Tests",
+					"item": [
+						{
+							"name": "Correct authentication",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Статус код должен быть 201\", function () {\r",
+											"    pm.response.to.have.status(201);\r",
+											"});\r",
+											"\r",
+											"const responseSchema = {\r",
+											"    \"type\": \"object\",\r",
+											"    \"properties\":{\r",
+											"        \"token\": {\"type\": \"string\"},\r",
+											"        \"message\": {\"type\": \"string\"},\r",
+											"    },\r",
+											"    \"required\": [\"token\", \"message\"],\r",
+											"    \"additionalProperties\": false\r",
+											"};\r",
+											"\r",
+											"pm.test('Структура ответа должна соответствовать ожидаемой', function () {\r",
+											"    pm.response.to.have.jsonSchema(responseSchema);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Ответ должен содержать данное сообщение об ошибке\", function () {\r",
+											"    pm.expect(pm.response.text()).to.include(\"You have been successfully authenticated\");\r",
+											"});\r",
+											"\r",
+											"const jsonData =pm.response.json()\r",
+											"pm.environment.set(\r",
+											"    \"JWT_TOKEN\",\r",
+											"    jsonData['token']\r",
+											");"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"login\": \"CorrectLogin123\",\r\n    \"password\": \"Correct_Passw00rd123(&)^(\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": "{{AUTHORIZATION_SERVICE_HOST}}/{{AUTHENTICATION_PATH}}"
+							},
+							"response": []
+						},
+						{
+							"name": "Incorrect authentication: bad login",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Статус код должен быть 404\", function () {\r",
+											"    pm.response.to.have.status(404);\r",
+											"});\r",
+											"\r",
+											"const responseSchema = {\r",
+											"    \"type\": \"object\",\r",
+											"    \"properties\":{\r",
+											"        \"token\": {\"type\": \"string\"},\r",
+											"        \"message\": {\"type\": \"string\"},\r",
+											"    },\r",
+											"    \"required\": [\"token\", \"message\"],\r",
+											"    \"additionalProperties\": false\r",
+											"};\r",
+											"\r",
+											"pm.test('Структура ответа должна соответствовать ожидаемой', function () {\r",
+											"    pm.response.to.have.jsonSchema(responseSchema);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Ответ должен содержать данное сообщение об ошибке\", function () {\r",
+											"    pm.expect(pm.response.text()).to.include(\"-\");\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Ответ должен содержать данное сообщение об ошибке\", function () {\r",
+											"    pm.expect(pm.response.text()).to.include(\"You have entered an incorrect login or password\");\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"login\": \"BadLogin123\",\r\n    \"password\": \"Correct_Passw00rd123(&)^(\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": "{{AUTHORIZATION_SERVICE_HOST}}/{{AUTHENTICATION_PATH}}"
+							},
+							"response": []
+						},
+						{
+							"name": "Incorrect authentication: bad password",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Статус код должен быть 404\", function () {\r",
+											"    pm.response.to.have.status(404);\r",
+											"});\r",
+											"\r",
+											"const responseSchema = {\r",
+											"    \"type\": \"object\",\r",
+											"    \"properties\":{\r",
+											"        \"token\": {\"type\": \"string\"},\r",
+											"        \"message\": {\"type\": \"string\"},\r",
+											"    },\r",
+											"    \"required\": [\"token\", \"message\"],\r",
+											"    \"additionalProperties\": false\r",
+											"};\r",
+											"\r",
+											"pm.test('Структура ответа должна соответствовать ожидаемой', function () {\r",
+											"    pm.response.to.have.jsonSchema(responseSchema);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Ответ должен содержать данное сообщение об ошибке\", function () {\r",
+											"    pm.expect(pm.response.text()).to.include(\"-\");\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Ответ должен содержать данное сообщение об ошибке\", function () {\r",
+											"    pm.expect(pm.response.text()).to.include(\"You have entered an incorrect login or password\");\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"login\": \"CorrectLogin123\",\r\n    \"password\": \"Bad_Passw00rd123(&)^(\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": "{{AUTHORIZATION_SERVICE_HOST}}/{{AUTHENTICATION_PATH}}"
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Logout Tests",
+					"item": [
+						{
+							"name": "Correct logout",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Статус код должен быть 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});\r",
+											"\r",
+											"const responseSchema = {\r",
+											"    \"type\": \"object\",\r",
+											"    \"properties\":{\r",
+											"        \"message\": {\"type\": \"string\"},\r",
+											"    },\r",
+											"    \"required\": [\"message\"],\r",
+											"    \"additionalProperties\": false\r",
+											"};\r",
+											"\r",
+											"pm.test('Структура ответа должна соответствовать ожидаемой', function () {\r",
+											"    pm.response.to.have.jsonSchema(responseSchema);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Ответ должен содержать данное сообщение об ошибке\", function () {\r",
+											"    pm.expect(pm.response.text()).to.include(\r",
+											"        \"You have been successfully logout from your account! Please, remove a jwt token from your Authorization Headers) I'm so lazy to do it)\");\r",
+											"});\r",
+											"\r",
+											"const jsonData = pm.response.json();\r",
+											"pm.environment.set(\r",
+											"    \"JWT_TOKEN\",\r",
+											"    \"\"\r",
+											");"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": {
+										"token": "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJSb21hbiBHcm9tb3YiLCJ1c2VybmFtZSI6IkNvcnJlY3RMb2dpbjEyMyIsImVtYWlsIjoiQ29ycmVjdExvZ2luMTIzIiwiZXhwIjoxNzI0MTQxMTk1LCJpYXQiOjE3MjQxMzkzOTV9.bhizLNDHVDp9PMWI8UBOOHA0EJFZoROdgjmVCxpGyIAAKiukiFeEknSUdLo4sNsiOIocbWlbWAHaEbzfqyAueP1u7T819-YWI6u6MiUM7hujibusPv-b9UHKQHX9W6hvBPVaR65zKFfJuwaTKE1Fy23fkyi-EGcRhM-Gf1ZkD60M6Xn5Um4mam0migx4vZB5Vgwo9DkmG14_MR5qeHpWeAZllP5COcxr_6Ti1CWQpQipD0ufPSzXtVhhY_U7j21PGCyvnC92SL5ICY3vaqtRQ1UuEAM_Jymqr_Uwgxb_pGhO-jiL_mE__J7jyainoqs2F-7I5jLshK-meOwdN68qUw"
+									}
+								},
+								"method": "GET",
+								"header": [
+									{
+										"key": "",
+										"value": "",
+										"type": "text",
+										"disabled": true
+									}
+								],
+								"url": "{{AUTHORIZATION_SERVICE_HOST}}/{{LOGOUT_PATH}}"
+							},
+							"response": []
+						},
+						{
+							"name": "Incorrect logout: no token",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Статус код должен быть 401\", function () {\r",
+											"    pm.response.to.have.status(401);\r",
+											"});\r",
+											"\r",
+											"const responseSchema = {\r",
+											"    \"type\": \"object\",\r",
+											"    \"properties\":{\r",
+											"        \"message\": {\"type\": \"string\"},\r",
+											"    },\r",
+											"    \"required\": [\"message\"],\r",
+											"    \"additionalProperties\": false\r",
+											"};\r",
+											"\r",
+											"pm.test('Структура ответа должна соответствовать ожидаемой', function () {\r",
+											"    pm.response.to.have.jsonSchema(responseSchema);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Ответ должен содержать данное сообщение об ошибке\", function () {\r",
+											"    pm.expect(pm.response.text()).to.include(\"You have not been authorized!\");\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "GET",
+								"header": [],
+								"url": "{{AUTHORIZATION_SERVICE_HOST}}/{{LOGOUT_PATH}}"
+							},
+							"response": []
+						},
+						{
+							"name": "Incorrect logout: bad token",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Статус код должен быть 401\", function () {\r",
+											"    pm.response.to.have.status(401);\r",
+											"});\r",
+											"\r",
+											"const responseSchema = {\r",
+											"    \"type\": \"object\",\r",
+											"    \"properties\":{\r",
+											"        \"message\": {\"type\": \"string\"},\r",
+											"    },\r",
+											"    \"required\": [\"message\"],\r",
+											"    \"additionalProperties\": false\r",
+											"};\r",
+											"\r",
+											"pm.test('Структура ответа должна соответствовать ожидаемой', function () {\r",
+											"    pm.response.to.have.jsonSchema(responseSchema);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Ответ должен содержать данное сообщение об ошибке\", function () {\r",
+											"    pm.expect(pm.response.text()).to.include(\"You have not been authorized!\");\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": {
+										"token": "2gui2gu2hg3g34igi34guh3u4gih3i4guh3i4ugh3iu4ghiu34hgiu34hgi3u4gh3i4ugh_incorrect_token"
+									}
+								},
+								"method": "GET",
+								"header": [],
+								"url": "{{AUTHORIZATION_SERVICE_HOST}}/{{LOGOUT_PATH}}"
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "GetAllUsers Tests",
+					"item": []
+				},
+				{
+					"name": "GetYserByLogin Tests",
+					"item": []
+				},
+				{
+					"name": "GetProfile Tests",
+					"item": []
+				}
+			]
+		},
+		{
+			"name": "KeyValue Service Tests",
+			"item": [
+				{
+					"name": "ReadKeyValues Tests",
+					"item": []
+				},
+				{
+					"name": "WriteKeyValues Tests",
+					"item": []
+				}
+			]
+		}
+	],
+	"variable": [
+		{
+			"key": "JWT_TOKEN",
+			"value": ""
+		}
+	]
+}

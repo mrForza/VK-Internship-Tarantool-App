@@ -1,4 +1,3 @@
-from dataclasses import asdict
 from functools import wraps
 
 from fastapi import APIRouter, Depends, Request
@@ -6,11 +5,13 @@ from starlette.responses import JSONResponse
 
 from src.application.auth.dto import *
 from src.application.auth.services import AuthorizationService
-from src.application.auth.exceptions import ApplicationException, UserIsNotAuthorized, DEFAUL_ERROR_MESSAGE
+from src.application.auth.exceptions import (
+    ApplicationException, UserIsNotAuthorized, IncorrectLoginOrPassword, DEFAUL_ERROR_MESSAGE
+)
 from src.presentation.api.providers.services import get_authorization_service
 from src.domain.common.exception import DomainException
 
-authorization_router = APIRouter(prefix='/auth', tags=['auth'])
+authorization_router = APIRouter(prefix='/api', tags=['api'])
 
 
 def exception_handler(dto_class):
@@ -22,10 +23,12 @@ def exception_handler(dto_class):
                 return result
             except UserIsNotAuthorized as error:
                 return JSONResponse(content=dto_class(error.message).dict(), status_code=401)
+            except IncorrectLoginOrPassword as error:  # Occures only in /login/ controller
+                return JSONResponse(content=dto_class(token='-', message=error.message).dict(), status_code=404)
             except (ApplicationException, DomainException) as error:
                 return JSONResponse(content=dto_class(error.message).dict(), status_code=400)
-            except Exception:
-                print('1' * 100)
+            except Exception as error:
+                print(error)
                 return JSONResponse(content=dto_class(DEFAUL_ERROR_MESSAGE).dict(), status_code=418)
         return wrapper
     return additional_wrapper
@@ -42,7 +45,7 @@ async def register(
 
 
 @authorization_router.post('/login/', response_model=None)
-@exception_handler(dto_class=LogoutResponseDto)
+@exception_handler(dto_class=AuthenticationResponseDto)
 async def authenticate(
         authentication_dto: AuthenticationRequestDto,
         auth_service: AuthorizationService = Depends(get_authorization_service)
@@ -51,14 +54,14 @@ async def authenticate(
     return JSONResponse(content=response.dict(), status_code=201)
 
 
-@authorization_router.post('/logout/', response_model=None)
+@authorization_router.get('/logout/', response_model=None)
 @exception_handler(dto_class=LogoutResponseDto)
 async def logout(
         requset: Request,
         auth_service: AuthorizationService = Depends(get_authorization_service)
 ) -> JSONResponse:
     response = auth_service.logout(LogoutRequestDto(requset.headers.get('Authorization')))
-    return JSONResponse(content=response.dict(), status_code=201)
+    return JSONResponse(content=response.dict(), status_code=200)
 
 
 @authorization_router.post('/check/', response_model=None)

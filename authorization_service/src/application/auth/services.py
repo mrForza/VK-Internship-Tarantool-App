@@ -5,7 +5,7 @@ from passlib.context import CryptContext
 from src.application.user.services import UserQueryService, UserCommandService
 from src.application.auth.dto import *
 from src.application.user.mapper import UserMapper
-from src.application.auth.exceptions import UserIsNotAuthorized, MismatchedPasswords
+from src.application.auth.exceptions import UserIsNotAuthorized, IncorrectLoginOrPassword
 from src.config import JwtConfig
 
 jwt_config = JwtConfig()
@@ -56,7 +56,7 @@ class AuthorizationService:
         await self.user_command_service.save_user(
             self.mapper.convert_registration_dto_to_full_user_dto(registration_dto)
         )
-        return RegistrationResponseDto('You have been successfully regirested!')
+        return RegistrationResponseDto('You have been successfully registered!')
 
     async def authenticate(self, authentication_dto: AuthenticationRequestDto) -> AuthenticationResponseDto:
         user = await self.user_query_service.get_user(authentication_dto.login)
@@ -71,14 +71,14 @@ class AuthorizationService:
         )
 
     def logout(self, logout_dto: LogoutRequestDto) -> LogoutResponseDto:
-        if logout_dto.token is not None:
+        if 'YES' in self.check(CheckRequestDto(authorization=logout_dto.token)).authorized:
             return LogoutResponseDto('You have been successfully logout from your account! Please, remove a jwt token '
                                      'from your Authorization Headers) I\'m so lazy to do it)')
         raise UserIsNotAuthorized()
 
     def check(self, check_dto: CheckRequestDto) -> CheckResponseDto:
         authorization_header = check_dto.authorization
-        if authorization_header == '':
+        if authorization_header is None or authorization_header == '':
             return CheckResponseDto('NO')
 
         data = authorization_header.split(' ')
@@ -96,4 +96,4 @@ class AuthorizationService:
     def verify_passwords(self, raw_password: str, hashed_password: str) -> None:
         if CryptContext(schemes=["bcrypt"], deprecated="auto") \
                 .hash(raw_password, salt="a" * 21 + "e") != hashed_password:
-            raise MismatchedPasswords()
+            raise IncorrectLoginOrPassword()

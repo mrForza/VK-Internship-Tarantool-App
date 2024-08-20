@@ -28,4 +28,4 @@ class BadInitialLength(InitialException):
 class BadInitialContent(InitialException):
     @property
     def message(self) -> str:
-        return f'{super().message}: login should have onlu lower-upper latin letters'
+        return f'{super().message}: initial should have only lower-upper latin letters'

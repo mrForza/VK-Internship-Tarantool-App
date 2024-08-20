@@ -3,6 +3,7 @@ from src.domain.value_objects import *
 from src.application.user.dto import FullUserDto
 from src.application.auth.dto import RegistrationRequestDto
 
+
 class UserMapper:
     @staticmethod
     def convert_entity_to_full_user_dto(entity: User) -> FullUserDto:

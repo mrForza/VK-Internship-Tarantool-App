@@ -40,7 +40,6 @@ class UserRepository(TarantoolRepositoy, UserReader, UserWriter):
         pass
 
     async def create_user(self, user_dto: FullUserDto) -> None:
-        print('USER_REPOSITORY create_user()')
         result = await self.conn.insert(
             'user',
             {
@@ -50,4 +49,3 @@ class UserRepository(TarantoolRepositoy, UserReader, UserWriter):
                 'surname': user_dto.surname,
             }
         )
-        print('~' * 10, result.body)
