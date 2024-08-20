@@ -17,12 +17,12 @@
 
 4) Собираем проект
     ``` bash
-    docker compose build
+    docker-compose build
     ```
 
 5) Запускаем проект
     ``` bash
-    docker compose up -d
+    docker-compose up -d
     ```
 
 6) Микросервис авторизации доступен по адресу: 
